@@ -84,20 +84,20 @@ export default function AboutPage({ currentLang = 'en' }) {
           </nav>
 
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-[#C59B27]/20 text-[#DFBF64] border border-[#C59B27]/40 shadow-xs">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-[#C59B27]/20 text-[#DFBF64] border border-[#C59B27]/40 shadow-xs animate-fade-in-up stagger-1">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Specialist-Led Day-Care Centre</span>
             </div>
 
-            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight animate-fade-in-up stagger-2">
               A Specialist-Led Vision for Precision Eye Care in Bhopal
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal animate-fade-in-up stagger-3">
               Founded on the belief that delicate retina and cataract surgeries require unhurried diagnostic listening, academic integrity, and world-class microsurgical technology.
             </p>
 
-            <div className="pt-4 flex flex-wrap items-center gap-4">
+            <div className="pt-4 flex flex-wrap items-center gap-4 animate-fade-in-up stagger-4">
               <Link
                 to="/pre-book"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#C59B27] hover:bg-[#B38A1F] text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all cursor-pointer"

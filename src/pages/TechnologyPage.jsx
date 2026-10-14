@@ -117,7 +117,7 @@ export default function TechnologyPage() {
             {equipment.map((eq, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 hover:border-[#DFBF64]/80 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 hover:border-[#DFBF64]/80 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between reveal-up"
               >
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md border border-sky-100 inline-block mb-3">

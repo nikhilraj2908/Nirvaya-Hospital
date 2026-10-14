@@ -8,7 +8,7 @@ export default function FinalCTA({ onOpenPreBook, currentLang = 'en' }) {
   return (
     <section className="py-20 lg:py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
       <Container>
-        <div className="relative rounded-3xl bg-gradient-to-r from-[#0A1E3F] via-[#0D2852] to-[#061226] p-8 sm:p-12 lg:p-16 text-white overflow-hidden shadow-2xl border border-slate-700/60">
+        <div className="relative rounded-3xl bg-gradient-to-r from-[#0A1E3F] via-[#0D2852] to-[#061226] p-8 sm:p-12 lg:p-16 text-white overflow-hidden shadow-2xl border border-slate-700/60 reveal-up">
           {/* Subtle luminous ambient accents */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#DFBF64]/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />

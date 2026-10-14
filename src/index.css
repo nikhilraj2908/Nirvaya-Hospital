@@ -98,3 +98,100 @@ html.font-scale-lg {
   }
 }
 
+/* ========================================================
+   Bottom-to-Top Reveal & Page Entrance Transitions
+   ======================================================== */
+
+@keyframes pageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpShort {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Page entrance transition */
+.animate-page-enter {
+  animation: pageEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+/* Element & Text immediate entrance transition */
+.animate-fade-in-up {
+  animation: fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.animate-slide-up-short {
+  animation: slideUpShort 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+/* Staggered Delay Utilities */
+.stagger-1 { animation-delay: 60ms; }
+.stagger-2 { animation-delay: 130ms; }
+.stagger-3 { animation-delay: 200ms; }
+.stagger-4 { animation-delay: 270ms; }
+.stagger-5 { animation-delay: 340ms; }
+.stagger-6 { animation-delay: 410ms; }
+
+/* Scroll-triggered text and element reveal */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-up.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children in a container with .reveal-stagger-children */
+.reveal-stagger-children > *:nth-child(1) { transition-delay: 40ms; }
+.reveal-stagger-children > *:nth-child(2) { transition-delay: 110ms; }
+.reveal-stagger-children > *:nth-child(3) { transition-delay: 180ms; }
+.reveal-stagger-children > *:nth-child(4) { transition-delay: 250ms; }
+.reveal-stagger-children > *:nth-child(5) { transition-delay: 320ms; }
+.reveal-stagger-children > *:nth-child(6) { transition-delay: 390ms; }
+
+/* Accessible Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-page-enter,
+  .animate-fade-in-up,
+  .animate-slide-up-short,
+  .reveal-up {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+

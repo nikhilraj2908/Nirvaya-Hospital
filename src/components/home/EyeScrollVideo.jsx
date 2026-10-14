@@ -289,15 +289,15 @@ export default function EyeScrollVideo({ onOpenPreBook, currentLang = 'en' }) {
           <div className="my-auto max-w-xl lg:max-w-lg xl:max-w-xl pointer-events-auto transition-all duration-300">
             {/* STAGE 0: Initial Hero Entry (0% - 20% scroll) */}
             {activeStage === 0 && (
-              <div className="space-y-4 sm:space-y-6 animate-in fade-in slide-in-from-bottom-3 duration-500">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Eyebrow */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-[#C59B27]/20 text-[#DFBF64] border border-[#C59B27]/40 shadow-xs">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-[#C59B27]/20 text-[#DFBF64] border border-[#C59B27]/40 shadow-xs animate-fade-in-up stagger-1">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>{currentLang === 'hi' ? 'भोपाल में विशेषज्ञ नेत्र चिकित्सा' : 'SPECIALIST EYE CARE IN BHOPAL'}</span>
                 </div>
 
                 {/* Primary Headline */}
-                <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white tracking-tight leading-[1.12]">
+                <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white tracking-tight leading-[1.12] animate-fade-in-up stagger-2">
                   {currentLang === 'hi' ? (
                     <span className="font-hindi">
                       विशेषज्ञ-निर्देशित <span className="text-[#DFBF64]">रेटिना एवं मोतियाबिंद</span> नेत्र देखभाल
@@ -314,14 +314,14 @@ export default function EyeScrollVideo({ onOpenPreBook, currentLang = 'en' }) {
                 </h1>
 
                 {/* Supporting Copy */}
-                <p className="text-sm sm:text-base lg:text-lg text-slate-200 leading-relaxed max-w-xl font-normal">
+                <p className="text-sm sm:text-base lg:text-lg text-slate-200 leading-relaxed max-w-xl font-normal animate-fade-in-up stagger-3">
                   {currentLang === 'hi'
                     ? 'रेटिना, मोतियाबिंद, डायबिटिक नेत्र रोग, आरओपी और संपूर्ण नेत्र विकारों के लिए सटीक, आधुनिक एवं व्यक्तिगत परामर्श।'
                     : 'Expert evaluation and personalised eye care for retina, cataract, diabetic eye disease, ROP and comprehensive ophthalmology in Bhopal.'}
                 </p>
 
                 {/* CTAs */}
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1 animate-fade-in-up stagger-4">
                   <Button
                     variant="gold"
                     size="lg"
@@ -354,7 +354,7 @@ export default function EyeScrollVideo({ onOpenPreBook, currentLang = 'en' }) {
                 </div>
 
                 {/* Trust Points Badges */}
-                <div className="pt-2 sm:pt-4 border-t border-slate-700/60 grid grid-cols-2 sm:flex sm:flex-wrap gap-2.5 sm:gap-4 text-xs text-slate-300 font-medium">
+                <div className="pt-2 sm:pt-4 border-t border-slate-700/60 grid grid-cols-2 sm:flex sm:flex-wrap gap-2.5 sm:gap-4 text-xs text-slate-300 font-medium animate-fade-in-up stagger-5">
                   <div className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-[#DFBF64] shrink-0" />
                     <span>Retina & Vitreoretinal Care</span>
@@ -377,7 +377,7 @@ export default function EyeScrollVideo({ onOpenPreBook, currentLang = 'en' }) {
 
             {/* STAGES 1 TO 5: Scroll Disassembly Choreography Overlays */}
             {activeStage > 0 && (
-              <div className="bg-[#061226]/85 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-slate-700/80 shadow-2xl max-w-lg space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="bg-[#061226]/85 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-slate-700/80 shadow-2xl max-w-lg space-y-4 animate-fade-in-up">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-[#C59B27]/20 text-[#DFBF64] border border-[#C59B27]/40">
                   <Layers className="w-3.5 h-3.5" />
                   <span>{currentContent.eyebrow}</span>

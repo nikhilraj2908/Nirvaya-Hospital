@@ -107,7 +107,7 @@ export default function ServicesPage() {
               <div
                 key={spec.id}
                 id={spec.id}
-                className="bg-white rounded-2xl p-6 sm:p-8 lg:p-10 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-300 scroll-mt-28"
+                className="bg-white rounded-2xl p-6 sm:p-8 lg:p-10 border border-slate-200/90 shadow-xs hover:shadow-md transition-all duration-300 scroll-mt-28 reveal-up"
               >
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                   {/* Left Column: Overview */}

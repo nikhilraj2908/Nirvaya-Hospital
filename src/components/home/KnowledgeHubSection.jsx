@@ -74,7 +74,7 @@ export default function KnowledgeHubSection() {
         </div>
 
         {/* Dual-Card Sub-Options Grid (Matching requested design) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto reveal-up">
           {subOptions.map((opt) => {
             const isBlog = opt.id === 'blogs';
             const Icon = isBlog ? FileText : BookOpen;

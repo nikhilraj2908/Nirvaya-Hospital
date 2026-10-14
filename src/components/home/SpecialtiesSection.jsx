@@ -44,7 +44,7 @@ export default function SpecialtiesSection({ currentLang = 'en' }) {
           {flagshipSpecialties.map((spec) => (
             <div
               key={spec.id}
-              className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-[#DFBF64]/80 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-[#DFBF64]/80 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between reveal-up"
             >
               <div>
                 {/* Category & Badge */}

@@ -14,7 +14,7 @@ export default function FAQSection() {
   return (
     <section id="faq" className="py-20 lg:py-28 bg-white border-t border-slate-200/80 scroll-mt-24">
       <Container>
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto reveal-up">
           <SectionHeading
             align="center"
             eyebrow="Common Patient Inquiries"

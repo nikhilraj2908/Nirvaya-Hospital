@@ -50,11 +50,17 @@ async function request(endpoint, options = {}) {
 
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      throw new Error(data.message || `Request failed with status ${res.status}`);
+      const error = new Error(data.message || `Request failed with status ${res.status}`);
+      error.status = res.status;
+      error.code = data.code;
+      error.data = data;
+      throw error;
     }
     return data;
   } catch (err) {
-    console.warn(`[API] ${endpoint} request error:`, err.message);
+    if (err.name !== 'AbortError') {
+      console.warn(`[API] ${endpoint} request error:`, err.message);
+    }
     throw err;
   }
 }
@@ -95,8 +101,54 @@ export async function getDoctorBySlug(slugOrId) {
 }
 
 // -------------------------------------------------------------
-// 3. Slot Booking & Availability
+// 3. Slot Booking & Availability (Interactive Calendar System)
 // -------------------------------------------------------------
+
+/**
+ * Fetch bookable dates and availability counts for a doctor in a given month (YYYY-MM)
+ */
+export async function getDoctorAvailability(doctorId, month, options = {}) {
+  const params = new URLSearchParams({ doctorId, month });
+  return request(`/availability?${params.toString()}`, {
+    signal: options.signal,
+    cache: 'no-store'
+  });
+}
+
+/**
+ * Fetch discrete 30-minute slots for a doctor on a specific date (YYYY-MM-DD)
+ */
+export async function getDoctorSlots(doctorId, date, options = {}) {
+  const params = new URLSearchParams({ doctorId, date });
+  return request(`/slots?${params.toString()}`, {
+    signal: options.signal,
+    cache: 'no-store'
+  });
+}
+
+/**
+ * Create confirmed appointment booking with idempotency key and atomic conflict protection
+ */
+export async function createAppointmentBooking(bookingPayload, idempotencyKey = null) {
+  const sessionId = getVisitorSessionId();
+  const headers = {};
+  if (idempotencyKey) {
+    headers['Idempotency-Key'] = idempotencyKey;
+  }
+
+  return request('/bookings', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      ...bookingPayload,
+      sessionId
+    })
+  });
+}
+
+/**
+ * Legacy slot check (backward compatibility)
+ */
 export async function getAvailableSlots(date, doctorId = null) {
   const params = new URLSearchParams({ date });
   if (doctorId) params.append('doctorId', doctorId);
@@ -104,7 +156,7 @@ export async function getAvailableSlots(date, doctorId = null) {
 }
 
 // -------------------------------------------------------------
-// 4. Clinical Appointments
+// 4. Clinical Appointments (Legacy fallback)
 // -------------------------------------------------------------
 export async function bookAppointment(formData) {
   const sessionId = getVisitorSessionId();

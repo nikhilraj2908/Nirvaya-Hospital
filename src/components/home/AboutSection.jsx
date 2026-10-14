@@ -31,7 +31,7 @@ export default function AboutSection() {
             </div>
 
             {/* Concise Highlight Badges */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1 reveal-up">
               <div className="p-3.5 rounded-xl bg-[#F8FAFC] border border-slate-200/80 flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-[#0A1E3F]/5 text-[#C59B27] flex items-center justify-center shrink-0">
                   <Award className="w-4 h-4" />
@@ -64,7 +64,7 @@ export default function AboutSection() {
             </div>
 
             {/* CTAs */}
-            <div className="pt-2 flex flex-wrap items-center gap-3.5">
+            <div className="pt-2 flex flex-wrap items-center gap-3.5 reveal-up">
               <Button
                 to="/about"
                 variant="gold"
@@ -92,7 +92,7 @@ export default function AboutSection() {
           </div>
 
           {/* Right Preview Card */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 reveal-up">
             <div className="relative rounded-2xl bg-[#0A1E3F] text-white p-7 sm:p-8 shadow-xl overflow-hidden border border-slate-700">
               <div className="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-[#DFBF64]/10 blur-2xl pointer-events-none" />
 

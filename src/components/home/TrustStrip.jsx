@@ -29,7 +29,7 @@ export default function TrustStrip() {
   return (
     <div className="w-full bg-[#061226] text-white border-y border-slate-800 py-8 lg:py-10">
       <Container>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 reveal-up">
           {trustItems.map((item, idx) => {
             const Icon = item.icon;
             return (

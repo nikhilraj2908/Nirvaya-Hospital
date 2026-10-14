@@ -100,24 +100,24 @@ export default function DoctorsPage() {
           </nav>
 
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-[#C59B27]/20 text-[#DFBF64] border border-[#C59B27]/40">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-[#C59B27]/20 text-[#DFBF64] border border-[#C59B27]/40 animate-fade-in-up stagger-1">
               <Award className="w-3.5 h-3.5" />
               <span>Medical Leadership & Specialist Faculty</span>
             </div>
 
-            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+            <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight animate-fade-in-up stagger-2">
               Dr Sandhya Gaur
             </h1>
 
-            <p className="text-base sm:text-lg text-[#DFBF64] font-medium leading-relaxed">
+            <p className="text-base sm:text-lg text-[#DFBF64] font-medium leading-relaxed animate-fade-in-up stagger-3">
               MD (AIIMS New Delhi) • DNB • FVRS • FAICO (Retina Gold Medalist)
             </p>
 
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal animate-fade-in-up stagger-4">
               Senior Consultant Vitreo-Retinal Surgeon & Medical Director at Nirvaya Eyecare Centre, bringing apex institute surgical rigour and patient-centred clinical empathy to Bhopal.
             </p>
 
-            <div className="pt-4 flex flex-wrap items-center gap-4">
+            <div className="pt-4 flex flex-wrap items-center gap-4 animate-fade-in-up stagger-5">
               <Link
                 to="/pre-book"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#C59B27] hover:bg-[#B38A1F] text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all cursor-pointer"

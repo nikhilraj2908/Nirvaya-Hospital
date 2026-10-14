@@ -17,7 +17,7 @@ export default function LocationSection() {
   return (
     <section id="contact" className="py-20 lg:py-28 bg-white border-t border-slate-200/80 scroll-mt-24">
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start reveal-up">
           {/* Left Column: Heading + Consultation Timings + Arterial Connectivity */}
           <div className="lg:col-span-6 space-y-6">
             <SectionHeading

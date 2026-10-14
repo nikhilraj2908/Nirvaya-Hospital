@@ -22,7 +22,7 @@ export default function DoctorSection() {
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: Doctor Profile Card */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 reveal-up">
             <div className="rounded-3xl bg-gradient-to-b from-[#0A1E3F] to-[#122B55] text-white p-7 sm:p-8 shadow-xl border border-slate-700/80 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-[#DFBF64]/10 blur-2xl pointer-events-none" />
 
@@ -93,7 +93,7 @@ export default function DoctorSection() {
           </div>
 
           {/* Right Column: Credentials & Surgical Philosophy */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-6 reveal-up">
             <SectionHeading
               align="left"
               eyebrow="Medical Leadership & Surgical Mastery"

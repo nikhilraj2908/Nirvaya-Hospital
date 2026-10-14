@@ -5,6 +5,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import StickyMobileActionBar from './components/home/StickyMobileActionBar';
 import { usePageTracking } from './hooks/usePageTracking';
+import { useScrollReveal } from './hooks/useScrollReveal';
 
 // Pages
 import Home from './pages/Home';
@@ -36,6 +37,9 @@ function AppContent({ currentLang, handleLangChange, currentFontScale, handleFon
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
+  // Trigger bottom-to-top reveal transitions on text and elements as they enter viewport
+  useScrollReveal();
+
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-[#DFBF64] selection:text-[#0A1E3F] overflow-x-clip w-full">
       {/* Show Public Header only on client-facing routes */}
@@ -48,9 +52,10 @@ function AppContent({ currentLang, handleLangChange, currentFontScale, handleFon
         />
       )}
 
-      {/* Dynamic Page Routes */}
+      {/* Dynamic Page Routes with Bottom-to-Top Transition on Page Mount */}
       <main id="main-content" className="flex-1 w-full overflow-x-clip">
-        <Routes>
+        <div key={location.pathname} className="animate-page-enter flex-1 w-full overflow-x-clip">
+          <Routes location={location}>
           <Route path="/" element={<Home currentLang={currentLang} />} />
           <Route path="/about" element={<AboutPage currentLang={currentLang} />} />
           <Route path="/pre-book" element={<PreBookPage currentLang={currentLang} />} />
@@ -76,6 +81,7 @@ function AppContent({ currentLang, handleLangChange, currentFontScale, handleFon
           {/* Catch-all fallback */}
           <Route path="*" element={<Home currentLang={currentLang} />} />
         </Routes>
+        </div>
       </main>
 
       {/* Show Public Footer and Sticky Bar only on client-facing routes */}

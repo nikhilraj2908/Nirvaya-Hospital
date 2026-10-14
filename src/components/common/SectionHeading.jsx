@@ -18,7 +18,7 @@ export default function SectionHeading({
   const bodyText = subtitle || description;
 
   return (
-    <div className={`flex flex-col max-w-3xl mb-12 lg:mb-16 ${alignClasses[align] || alignClasses.center} ${className}`}>
+    <div className={`flex flex-col max-w-3xl mb-12 lg:mb-16 ${alignClasses[align] || alignClasses.center} reveal-up ${className}`}>
       {eyebrow && (
         <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full text-xs font-semibold tracking-wider uppercase bg-[#FDF9EE] text-[#C59B27] border border-[#C59B27]/30">
           <span className="w-1.5 h-1.5 rounded-full bg-[#C59B27]"></span>
