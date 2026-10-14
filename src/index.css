@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+:root {
+  --navy-primary: #0A1E3F;
+  --navy-dark: #061226;
+  --navy-light: #16325C;
+  --gold-primary: #C59B27;
+  --gold-light: #DFBF64;
+  --gold-subtle: #FDF9EE;
+  --white: #FFFFFF;
+  --off-white: #F8FAFC;
+  --surface-tint: #F1F5F9;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --border-light: #E2E8F0;
+
+  --font-scale: 100%;
+}
+
+html {
+  font-size: var(--font-scale);
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-primary);
+  background-color: var(--white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+/* Accessibility Font Scale Classes */
+html.font-scale-sm {
+  --font-scale: 90%;
+}
+html.font-scale-md {
+  --font-scale: 100%;
+}
+html.font-scale-lg {
+  --font-scale: 112%;
+}
+
+/* Heading font helper */
+.font-heading {
+  font-family: 'Plus Jakarta Sans', 'Manrope', system-ui, sans-serif;
+}
+
+.font-hindi {
+  font-family: 'Noto Sans Devanagari', 'Mukta', 'Noto Sans', sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Focus styles for keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+}
+
+/* Hero Eye Video Desktop Right Alignment */
+@media (min-width: 1024px) {
+  .hero-video-right-shift {
+    transform: translateX(20%) scale(1.05);
+    transform-origin: center center;
+  }
+}
+@media (min-width: 1280px) {
+  .hero-video-right-shift {
+    transform: translateX(22%) scale(1.06);
+    transform-origin: center center;
+  }
+}
+@media (min-width: 1536px) {
+  .hero-video-right-shift {
+    transform: translateX(24%) scale(1.08);
+    transform-origin: center center;
+  }
+}
+
