@@ -10,6 +10,8 @@ import {
   getLiveStats,
   getAdminAppointments,
   updateAppointmentStatus,
+  deleteAppointment,
+  bookAppointment,
   getRoles,
   getPermissionsCatalog,
   createRole,
@@ -77,6 +79,20 @@ export default function AdminPage() {
   const [apptFilter, setApptFilter] = useState('all');
   const [apptSearch, setApptSearch] = useState('');
   const [apptLoading, setApptLoading] = useState(false);
+  const [showApptModal, setShowApptModal] = useState(false);
+  const [apptSubmitting, setApptSubmitting] = useState(false);
+  const [apptSuccessMsg, setApptSuccessMsg] = useState('');
+  const [newAppt, setNewAppt] = useState({
+    patientName: '',
+    phone: '',
+    age: '',
+    city: 'Bhopal',
+    specialty: 'Retina & Vitreoretinal Surgery',
+    preferredDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    preferredSlot: 'Morning (10:00 AM – 1:00 PM)',
+    reason: '',
+    consent: true
+  });
 
   // Roles & RBAC State
   const [roles, setRoles] = useState([]);
@@ -199,8 +215,61 @@ export default function AdminPage() {
     try {
       await updateAppointmentStatus(id, newStatus);
       loadAppointments();
+      loadCrp();
     } catch (err) {
       alert(`Could not update appointment: ${err.message}`);
+    }
+  };
+
+  const handleCreateAppointment = async (e) => {
+    e.preventDefault();
+    if (!newAppt.patientName.trim()) {
+      alert('Please enter patient name');
+      return;
+    }
+    const cleanPhone = newAppt.phone.replace(/[^0-9]/g, '');
+    if (cleanPhone.length < 10) {
+      alert('Please enter a valid 10-digit mobile number');
+      return;
+    }
+    setApptSubmitting(true);
+    try {
+      await bookAppointment({
+        ...newAppt,
+        phone: cleanPhone,
+        source: 'admin-portal'
+      });
+      setShowApptModal(false);
+      setApptSuccessMsg(`Appointment for "${newAppt.patientName}" created successfully!`);
+      setNewAppt({
+        patientName: '',
+        phone: '',
+        age: '',
+        city: 'Bhopal',
+        specialty: 'Retina & Vitreoretinal Surgery',
+        preferredDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+        preferredSlot: 'Morning (10:00 AM – 1:00 PM)',
+        reason: '',
+        consent: true
+      });
+      await loadAppointments();
+      loadCrp();
+      setTimeout(() => setApptSuccessMsg(''), 4000);
+    } catch (err) {
+      alert(`Failed to create appointment: ${err.message}`);
+    } finally {
+      setApptSubmitting(false);
+    }
+  };
+
+  const handleDeleteAppointment = async (id, ref) => {
+    if (!window.confirm(`Are you sure you want to delete appointment ${ref || id}?`)) return;
+    try {
+      await deleteAppointment(id);
+      loadAppointments();
+      loadCrp();
+    } catch (err) {
+      alert(`Failed to delete appointment: ${err.message}`);
     }
   };
 
@@ -760,6 +829,18 @@ export default function AdminPage() {
                 </span>
               </div>
 
+              {crpData?.summary?.totalVisitors === 0 && (
+                <div className="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 text-xs text-amber-800 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#C59B27] shrink-0" />
+                    <span>Clean slate ready: All mock data removed. Metrics will populate live as visitors browse and book.</span>
+                  </div>
+                  <Link to="/" target="_blank" className="font-bold text-[#0A1E3F] hover:underline shrink-0 ml-2">
+                    Open Website →
+                  </Link>
+                </div>
+              )}
+
               <div className="space-y-4">
                 {crpData?.funnel && crpData.funnel.length > 0 ? (
                   crpData.funnel.map((stage) => (
@@ -805,7 +886,7 @@ export default function AdminPage() {
                   Visitor Device Distribution
                 </h3>
                 <div className="space-y-3 text-xs">
-                  {crpData?.deviceBreakdown ? (
+                  {crpData?.deviceBreakdown && Object.values(crpData.deviceBreakdown).reduce((a, b) => a + b, 0) > 0 ? (
                     Object.entries(crpData.deviceBreakdown).map(([device, count]) => {
                       const total = Object.values(crpData.deviceBreakdown).reduce((a, b) => a + b, 0) || 1;
                       const pct = ((count / total) * 100).toFixed(1);
@@ -825,7 +906,7 @@ export default function AdminPage() {
                       );
                     })
                   ) : (
-                    <p className="text-slate-400">Loading device analytics...</p>
+                    <p className="text-slate-400 italic py-2">No visitor device sessions recorded yet. Browse the site to capture telemetry.</p>
                   )}
                 </div>
               </div>
@@ -836,7 +917,7 @@ export default function AdminPage() {
                   Traffic Acquisition Channels
                 </h3>
                 <div className="space-y-3 text-xs">
-                  {crpData?.sourceBreakdown ? (
+                  {crpData?.sourceBreakdown && Object.values(crpData.sourceBreakdown).reduce((a, b) => a + b, 0) > 0 ? (
                     Object.entries(crpData.sourceBreakdown).map(([source, count]) => {
                       const total = Object.values(crpData.sourceBreakdown).reduce((a, b) => a + b, 0) || 1;
                       const pct = ((count / total) * 100).toFixed(1);
@@ -856,7 +937,7 @@ export default function AdminPage() {
                       );
                     })
                   ) : (
-                    <p className="text-slate-400">Loading acquisition channels...</p>
+                    <p className="text-slate-400 italic py-2">No traffic channels recorded yet. Visit the site directly or via search to generate telemetry.</p>
                   )}
                 </div>
               </div>
@@ -875,13 +956,13 @@ export default function AdminPage() {
                   Patient Appointment Ledger
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Review and confirm consultation pre-bookings from the website
+                  Review, confirm, or manually create clinical appointments stored live in MongoDB
                 </p>
               </div>
 
-              {/* Search & Filter */}
+              {/* Action Buttons & Filters */}
               <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                <div className="relative flex-1 sm:w-60">
+                <div className="relative flex-1 sm:w-56">
                   <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
@@ -909,11 +990,28 @@ export default function AdminPage() {
                   type="button"
                   onClick={loadAppointments}
                   className="p-1.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-600 transition-colors shadow-xs cursor-pointer"
+                  title="Refresh Appointments"
                 >
                   <RefreshCw className={`w-4 h-4 ${apptLoading ? 'animate-spin' : ''}`} />
                 </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowApptModal(true)}
+                  className="px-3.5 py-1.5 rounded-lg bg-[#0A1E3F] hover:bg-[#16325C] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
+                >
+                  <Plus className="w-3.5 h-3.5 text-[#DFBF64]" />
+                  <span>New Appointment</span>
+                </button>
               </div>
             </div>
+
+            {apptSuccessMsg && (
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>{apptSuccessMsg}</span>
+              </div>
+            )}
 
             {/* Table */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
@@ -932,8 +1030,26 @@ export default function AdminPage() {
                   <tbody className="divide-y divide-slate-100">
                     {appointments.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="py-8 text-center text-slate-400">
-                          No appointments found matching current filter.
+                        <td colSpan={6} className="py-12 text-center">
+                          <div className="max-w-sm mx-auto space-y-3">
+                            <div className="w-12 h-12 mx-auto rounded-2xl bg-slate-100 text-[#0A1E3F] flex items-center justify-center">
+                              <Calendar className="w-6 h-6 text-[#DFBF64]" />
+                            </div>
+                            <h4 className="font-heading font-bold text-slate-700 text-sm">
+                              No Appointments in Database
+                            </h4>
+                            <p className="text-xs text-slate-500 leading-relaxed">
+                              All fake demo data has been purged. You can test live database entry by creating an appointment manually here or submitting a pre-booking from the website.
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => setShowApptModal(true)}
+                              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0A1E3F] hover:bg-[#16325C] text-white font-bold text-xs shadow-sm transition-all cursor-pointer"
+                            >
+                              <Plus className="w-4 h-4 text-[#DFBF64]" />
+                              <span>Create Manual Appointment</span>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ) : (
@@ -949,9 +1065,9 @@ export default function AdminPage() {
                               {appt.city && <span>• {appt.city}</span>}
                               {appt.age && <span>• Age {appt.age}</span>}
                             </div>
-                            {appt.symptoms && (
+                            {appt.reason && (
                               <p className="text-[11px] text-slate-400 italic line-clamp-1 mt-0.5">
-                                "{appt.symptoms}"
+                                "{appt.reason}"
                               </p>
                             )}
                           </td>
@@ -1006,6 +1122,14 @@ export default function AdminPage() {
                                   Cancel
                                 </button>
                               )}
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteAppointment(appt.id, appt.bookingRef)}
+                                className="p-1.5 rounded bg-slate-100 hover:bg-rose-100 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+                                title="Delete Appointment"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -1015,6 +1139,169 @@ export default function AdminPage() {
                 </table>
               </div>
             </div>
+
+            {/* Modal: Create Manual Appointment */}
+            {showApptModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-150">
+                  <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                    <div>
+                      <h3 className="font-heading text-xl font-bold text-[#0A1E3F]">
+                        Create Manual Patient Appointment
+                      </h3>
+                      <p className="text-xs text-slate-500">
+                        Add a consultation reservation directly into MongoDB Atlas
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowApptModal(false)}
+                      className="p-1 rounded-lg text-slate-400 hover:text-slate-600 cursor-pointer"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleCreateAppointment} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Patient Full Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Ramesh Kumar"
+                        value={newAppt.patientName}
+                        onChange={(e) => setNewAppt({ ...newAppt, patientName: e.target.value })}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#C59B27] focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Mobile Phone (10 digits) <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          placeholder="9826012345"
+                          value={newAppt.phone}
+                          onChange={(e) => setNewAppt({ ...newAppt, phone: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#C59B27] focus:outline-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Age
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="e.g. 45"
+                          value={newAppt.age}
+                          onChange={(e) => setNewAppt({ ...newAppt, age: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#C59B27] focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          City
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Bhopal"
+                          value={newAppt.city}
+                          onChange={(e) => setNewAppt({ ...newAppt, city: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#C59B27] focus:outline-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Specialty
+                        </label>
+                        <select
+                          value={newAppt.specialty}
+                          onChange={(e) => setNewAppt({ ...newAppt, specialty: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#C59B27] focus:outline-none"
+                        >
+                          <option value="Retina & Vitreoretinal Surgery">Retina & Vitreoretinal Surgery</option>
+                          <option value="Advanced Cataract & Phacoemulsification">Advanced Cataract & Phaco</option>
+                          <option value="Glaucoma Diagnostics & Laser">Glaucoma Diagnostics & Laser</option>
+                          <option value="Refractive & LASIK Evaluation">Refractive & LASIK Evaluation</option>
+                          <option value="Cornea & Ocular Surface Disease">Cornea & Ocular Surface</option>
+                          <option value="Pediatric Ophthalmology & Squint">Pediatric Ophthalmology</option>
+                          <option value="Comprehensive Eye Examination">Comprehensive Eye Examination</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Preferred Date
+                        </label>
+                        <input
+                          type="date"
+                          required
+                          value={newAppt.preferredDate}
+                          onChange={(e) => setNewAppt({ ...newAppt, preferredDate: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#C59B27] focus:outline-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          OPD Shift
+                        </label>
+                        <select
+                          value={newAppt.preferredSlot}
+                          onChange={(e) => setNewAppt({ ...newAppt, preferredSlot: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#C59B27] focus:outline-none"
+                        >
+                          <option value="Morning (10:00 AM – 1:00 PM)">Morning (10:00 AM – 1:00 PM)</option>
+                          <option value="Evening (5:00 PM – 8:00 PM)">Evening (5:00 PM – 8:00 PM)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Reason / Patient Symptoms
+                      </label>
+                      <textarea
+                        rows={2}
+                        placeholder="e.g. Sudden floaters in right eye, routine diabetic retina follow-up..."
+                        value={newAppt.reason}
+                        onChange={(e) => setNewAppt({ ...newAppt, reason: e.target.value })}
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#C59B27] focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                      <button
+                        type="button"
+                        onClick={() => setShowApptModal(false)}
+                        className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-50 transition-colors cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={apptSubmitting}
+                        className="px-5 py-2.5 rounded-xl bg-[#0A1E3F] hover:bg-[#16325C] text-white font-bold text-xs shadow-md transition-all cursor-pointer"
+                      >
+                        {apptSubmitting ? 'Saving to Database...' : 'Save Live Appointment'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

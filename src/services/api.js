@@ -245,6 +245,12 @@ export async function updateAppointmentStatus(id, status, notes = '') {
   });
 }
 
+export async function deleteAppointment(id) {
+  return request(`/appointments/${id}`, {
+    method: 'DELETE'
+  });
+}
+
 // -------------------------------------------------------------
 // 11. Dynamic Positions & Granular RBAC
 // -------------------------------------------------------------
