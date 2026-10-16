@@ -4,6 +4,7 @@ import { ChevronDown, Calendar, Menu } from 'lucide-react';
 import { NAVIGATION_ITEMS, CLINIC_INFO } from '../../data/siteData';
 import Logo from '../common/Logo';
 import Button from '../common/Button';
+import EyeTrackingButton from '../common/EyeTrackingButton';
 
 export default function MainNavigation({
   isScrolled = false,
@@ -122,16 +123,14 @@ export default function MainNavigation({
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 ml-auto lg:ml-0">
-          {/* Pre-book Page Redirect Button */}
-          <Link
+          {/* Pre-book Page Redirect Button with Interactive Eye Tracking */}
+          <EyeTrackingButton
             to="/pre-book"
-            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-[#0A1E3F] text-white hover:bg-[#16325C] active:scale-95 transition-all shadow-sm font-bold text-xs sm:text-sm whitespace-nowrap shrink-0 cursor-pointer"
-            aria-label="Pre-book an appointment slot"
-          >
-            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#DFBF64] shrink-0" />
-            <span className="hidden sm:inline">Pre-book a Slot</span>
-            <span className="sm:hidden">Pre-book</span>
-          </Link>
+            label="Pre-book a Slot"
+            variant="navy"
+            size="md"
+            ariaLabel="Pre-book an appointment slot"
+          />
 
           <button
             type="button"

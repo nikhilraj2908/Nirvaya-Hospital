@@ -4,6 +4,7 @@ import { X, ChevronDown, ChevronRight, Phone, MessageSquare, Calendar, Shield } 
 import { NAVIGATION_ITEMS, CLINIC_INFO } from '../../data/siteData';
 import Logo from '../common/Logo';
 import Button from '../common/Button';
+import EyeTrackingButton from '../common/EyeTrackingButton';
 
 export default function MobileNavigation({
   isOpen,
@@ -131,16 +132,15 @@ export default function MobileNavigation({
         </nav>
 
         <div className="p-4 border-t border-slate-200 bg-[#F8FAFC] space-y-2.5">
-          <Button
+          <EyeTrackingButton
             to="/pre-book"
-            variant="primary"
+            label="Pre-book a Slot"
+            variant="navy"
             size="md"
-            className="w-full justify-center shadow-md font-bold text-sm min-h-[44px]"
+            className="w-full justify-center shadow-md font-bold text-sm min-h-[46px]"
             onClick={onClose}
-            icon={Calendar}
-          >
-            Pre-book a Slot
-          </Button>
+            showMobileShortText={false}
+          />
 
           <div className="grid grid-cols-2 gap-2 pt-0.5">
             <a
