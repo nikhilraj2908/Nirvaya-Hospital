@@ -10,7 +10,6 @@ import LocationSection from '../components/home/LocationSection';
 import FAQSection from '../components/home/FAQSection';
 import FinalCTA from '../components/home/FinalCTA';
 import KnowledgeHubSection from '../components/home/KnowledgeHubSection';
-
 export default function Home({ currentLang = 'en' }) {
   return (
     <div className="flex-1 pb-16 lg:pb-0 overflow-x-clip w-full">
@@ -42,7 +41,7 @@ export default function Home({ currentLang = 'en' }) {
       <LocationSection />
 
       {/* Frequently Asked Questions */}
-      <FAQSection />
+      <FAQSection currentLang={currentLang} />
 
       {/* Final Pre-Footer Call-To-Action */}
       <FinalCTA currentLang={currentLang} />

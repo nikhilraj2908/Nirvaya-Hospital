@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Journal';
+  src: url('/fonts/journal-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-journal {
+  font-family: 'Journal', 'Caveat', cursive, sans-serif;
+}
+
 :root {
   --navy-primary: #0A1E3F;
   --navy-dark: #061226;
@@ -105,11 +117,11 @@ html.font-scale-lg {
 @keyframes pageEnter {
   0% {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(18px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
@@ -137,8 +149,8 @@ html.font-scale-lg {
 
 /* Page entrance transition */
 .animate-page-enter {
-  animation: pageEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, opacity;
+  animation: pageEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity;
 }
 
 /* Element & Text immediate entrance transition */
